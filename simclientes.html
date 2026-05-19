@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Financiera - Gestión de Créditos</title>
+    <link rel="stylesheet" href="simclientes.css">
+    <script src="utilitarios.js"></script>  
+    <script src="simclientes.js"></script>
+</head>
+<body>
+
+    <nav class="menu-navegacion">
+        <button class="btn btn-secundario" onclick="mostrarSeccion('parametros')">Parámetros</button>
+        <button class="btn btn-secundario" onclick="mostrarSeccion('seccionClientes')">Clientes</button>
+        <button class="btn btn-secundario" onclick="mostrarSeccion('seccionCreditos')">Simular Crédito Standar</button>
+        <button class="btn btn-secundario" onclick="mostrarSeccion('seccionCreditosVip')">Simular Crédito VIP</button>
+        <button class="btn btn-secundario" onclick="mostrarSeccion('listaCreditos')">Historial Créditos</button>
+        <button class="btn btn-secundario" onclick="mostrarSeccion('AcercaDe')">Acerca de</button>
+    </nav>
+
+    <section id="parametros" class="activa">
+        <div class="tarjeta-contenedor">
+            <h2>Configuración del Sistema</h2>
+            
+            <h5>Tasa de Interés Anual (%)</h5>
+            <input type="number" id="tasaInteres" min="10" max="20" value="15"/>
+            <input type="button" value="Guardar Tasa" class="btn btn-primario" onclick="guardarTasa();"/>
+            
+            
+            <p id="mensajeTasa" class="mensaje-estado"></p>
+        </div>
+    </section>
+
+    <section id="seccionClientes">
+        <div class="tarjeta-contenedor">
+            <h2>Administración de Clientes</h2>
+            
+            <h5>Cédula</h5>
+            <input type="text" id="cedula" placeholder="Ej: 1712345678"/>
+            
+            <div class="fila-inputs">
+                <div class="columna">
+                    <h5>Nombre</h5>
+                    <input type="text" id="nombre"/>
+                </div>
+                <div class="columna">
+                    <h5>Apellido</h5>
+                    <input type="text" id="apellido"/>
+                </div>
+            </div>
+               
+             <div class="columna">
+                    <h5>Teléfono</h5>
+                    <input type="text" id="telefono"/>
+                </div>
+            </div>
+
+            <div class="fila-inputs">
+                <div class="columna">
+                    <h5>Ingresos Mensuales</h5>
+                    <input type="number" id="ingresos" step="0.01"/>
+                </div>
+                <div class="columna">
+                    <h5>Egresos Mensuales</h5>
+                    <input type="number" id="egresos" step="0.01"/>
+                </div>
+            </div>
+            
+            <div class="grupo-botones">
+                <input type="button" value="Guardar Registrar" class="btn btn-primario" onclick="guardarCliente();"/>
+                <input type="button" value="Limpiar Campos" class="btn btn-secundario" onclick="limpiar();"/>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Ingresos</th>
+                            <th>Egresos</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientes"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="seccionCreditos">
+        <div class="tarjeta-contenedor">
+            <h2>Simulador de Crédito</h2>
+            <h5>Buscar Cliente de Identidad</h5>
+            <div class="caja-buscar-grupo">
+                <input type="text" id="buscarCedulaCredito" placeholder="Ingrese cédula del cliente"/>
+                <input type="button" value="Buscar" class="btn btn-primario" onclick="buscarClienteCredito();"/>
+            </div>
+
+            <div id="datosClienteCredito" class="panel-info-cliente">
+                <p class="texto-vacio">No se ha seleccionado ningún cliente.</p>
+            </div>
+
+            <h5>Monto Solicitado ($)</h5>
+            <input type="number" id="montoCredito" placeholder="Máximo permitido: 5000"/>
+
+            <h5>Plazo (Meses)</h5>
+            <input type="number" id="plazoCredito" placeholder="Ej: 12"/>
+
+            <div class="grupo-botones">
+                <input type="button" value="Calcular Viabilidad" class="btn btn-primario" onclick="calcularCredito();"/>
+                <input type="button" id="btnSolicitarCredito" value="Solicitar Crédito" class="btn btn-exito" onclick="solicitarCredito();" disabled/>
+            </div>
+
+            <div id="resultadoCredito" class="resultado-simulacion"></div>
+        </div>
+    </section>
+
+    <section id="seccionCreditosVip">
+        <div class="tarjeta-contenedor">
+            <h2>Simulador de Crédito VIP</h2>
+            <h5>Buscar Cliente de Identidad</h5>
+            <div class="caja-buscar-grupo">
+                <input type="text" id="buscarCedulaVip" placeholder="Ingrese cédula del cliente"/>
+                <input type="button" value="Buscar" class="btn btn-primario" onclick="buscarClienteVip();"/>
+            </div>
+
+            <div id="datosClienteVip" class="panel-info-cliente">
+                <p class="texto-vacio">No se ha seleccionado ningún cliente.</p>
+            </div>
+
+            <h5>Monto Solicitado ($)</h5>
+            <input type="number" id="montoCreditoVip" placeholder="Mínimo permitido: 5000"/>
+
+            <h5>Plazo (Meses)</h5>
+            <input type="number" id="plazoCreditoVip" placeholder="Ej: 24"/>
+
+            <div class="grupo-botones">
+                <input type="button" value="Calcular Viabilidad VIP" class="btn btn-primario" onclick="calcularCreditoVip();"/>
+                <input type="button" id="btnSolicitarCreditoVip" value="Solicitar Crédito VIP" class="btn btn-exito" onclick="solicitarCreditoVip();" disabled/>
+            </div>
+
+            <div id="resultadoCreditoVip" class="resultado-simulacion"></div>
+        </div>
+    </section>
+
+    <section id="listaCreditos">
+        <div class="tarjeta-contenedor">
+            <h2>Historial de Créditos Otorgados</h2>
+            <h5>Filtrar por Cédula</h5>
+            <div class="caja-buscar-grupo">
+                <input type="text" id="buscarCedulaListado" placeholder="Cédula del cliente"/>
+                <input type="button" value="Filtrar" class="btn btn-primario" onclick="buscarCreditosCliente();"/>
+                <input type="button" value="Ver Todos" class="btn btn-secundario" onclick="pintarCreditos(creditos);"/>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Monto</th>
+                            <th>Tasa</th>
+                            <th>Plazo</th>
+                            <th>Cuota Mensual</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCreditos"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="AcercaDe" class="seccion-acerca-de">
+    <div class="tarjeta-contenedor">
+        <h2>Acerca de</h2>
+        
+        <div class="autor-info">
+          
+            <img src="pngtree-anime-style-cute-cat-illustration-image-png-image_10043771.png" alt="Foto de David Guamanzara" class="foto-perfil">
+            
+            <p class="desarrollador">Desarrollado por <strong>David Guamanzara</strong></p>
+        </div>
+
+        <hr class="divisor">
+
+        <ul class="lista-contacto">
+            <li>
+                <span class="etiqueta">Consultas y Soporte:</span> 
+                <span class="valor">0958837300</span>
+            </li>
+            <li>
+                <span class="etiqueta">Horario de Atención:</span> 
+                <span class="valor">Lunes a Viernes de 09:00 a 18:00</span>
+            </li>
+        </ul>
+
+         <div class="nota-soporte">
+            <p class="texto-nota">Haz click aqui para nuestras redes sociales</p>
+        </div>
+
+        <div class="nota-soporte">
+            <p class="texto-nota">"En caso de presentar fallas, lo resolvemos el lunes con calma."</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
