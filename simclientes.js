@@ -82,6 +82,7 @@ function guardarCliente() {
     let ced = recuperaraTexto("cedula");
     let nom = recuperaraTexto("nombre");
     let ape = recuperaraTexto("apellido");
+    let correo = recuperaraTexto("correo");
     let ing = recuperarFloat("ingresos");
     let egr = recuperarFloat("egresos");
 
@@ -92,10 +93,11 @@ function guardarCliente() {
 
     let existente = buscarCliente(ced);
     if (existente == null) {
-        clientes.push({ cedula: ced, nombre: nom, apellido: ape, ingresos: ing, egresos: egr });
+        clientes.push({ cedula: ced, nombre: nom, apellido: ape, correo: correo, ingresos: ing, egresos: egr });
     } else {
         existente.nombre = nom; 
         existente.apellido = ape;
+        existente.correo = correo;
         existente.ingresos = ing; 
         existente.egresos = egr;
     }
@@ -108,8 +110,9 @@ function pintarClientes() {
     tabla.innerHTML = ""; 
     clientes.forEach(c => {
         let fila = `<tr>
-            <td>${c.cedula}</td><td>${c.nombre}</td><td>${c.apellido}</td>
+            <td>${c.cedula}</td><td>${c.nombre}</td><td>${c.apellido}</td>     <td>${c.correo}</td>
             <td>$${c.ingresos.toFixed(2)}</td><td>$${c.egresos.toFixed(2)}</td>
+        
             <td><button class="btn btn-secundario" onclick="seleccionarCliente('${c.cedula}')">Actualizar</button></td>
         </tr>`;
         tabla.innerHTML += fila;
@@ -124,6 +127,7 @@ function seleccionarCliente(cedula) {
         mostrarTextoEnCaja("apellido", c.apellido);
         mostrarTextoEnCaja("ingresos", c.ingresos);
         mostrarTextoEnCaja("egresos", c.egresos);
+        mostrarTextoEnCaja("correo", c.correo);
     }
 }
 
@@ -133,6 +137,7 @@ function limpiar() {
     mostrarTextoEnCaja("apellido", ""); 
     mostrarTextoEnCaja("ingresos", "");
     mostrarTextoEnCaja("egresos", "");
+    mostrarTextoEnCaja("correo", "");   
     clienteSeleccionado = null;
 }
 
@@ -334,6 +339,7 @@ function pintarCreditos(arregloCreditos) {
             <td>${cre.cedula}</td>
             <td>${cre.nombre}</td>
             <td>${cre.apellido}</td>
+            <td>${cre.correo}</td>
             <td>$${cre.monto}</td>
             <td>${cre.tasa}%</td>
             <td>${cre.plazo} meses</td>
